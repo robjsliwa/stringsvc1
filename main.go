@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/go-kit/kit/log"
-	httptransport "github.com/go-kit/kit/transport/http"
 )
 
 func main() {
@@ -15,7 +14,7 @@ func main() {
 	svc = stringService{}
 	svc = loggingMiddleware{logger, svc}
 
-	uppercaseHandler := httptransport.NewServer(
+	/*uppercaseHandler := httptransport.NewServer(
 		makeUppercaseEndpoint(svc),
 		decodeUppercaseRequest,
 		encodeResponse,
@@ -28,6 +27,12 @@ func main() {
 	)
 
 	http.Handle("/uppercase", uppercaseHandler)
-	http.Handle("/count", countHandler)
-	logger.Log(http.ListenAndServe(":8080", nil))
+	http.Handle("/count", countHandler)*/
+
+	var h http.Handler
+	{
+		h = MakeHTTPHandler(svc, logger)
+	}
+
+	logger.Log(http.ListenAndServe(":8080", h))
 }
