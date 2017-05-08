@@ -8,25 +8,6 @@ import (
 	httptransport "github.com/go-kit/kit/transport/http"
 )
 
-// **** Requests and responses
-
-type uppercaseRequest struct {
-	InputString string `json:"input_string"`
-}
-
-type uppercaseResponse struct {
-	UppercasedString string `json:"uppercased_string"`
-	Err              string `json:"error_message,omitempty"`
-}
-
-type countRequest struct {
-	InputString string `json:"input_string"`
-}
-
-type countResponse struct {
-	Length int `json:"length"`
-}
-
 func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
 
