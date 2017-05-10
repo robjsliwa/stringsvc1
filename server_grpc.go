@@ -1,28 +1,46 @@
 package main
 
 import (
+	"golang.org/x/net/context"
+
 	"github.com/go-kit/kit/log"
-
-	"github.com/go-kit/kit/examples/addsvc/pb"
+	grpctransport "github.com/go-kit/kit/transport/grpc"
+	"github.com/robjsliwa/stringsvc1/pb"
 )
-
-// MakeGRPCServer - make gRPC server
-func MakeGRPCServer(endpoints Endpoints, tracer stdopentracing.Tracer, logger log.Logger) pb.AddServer {
-	return &grpcServer{
-		uppercase: grpctransport.NewServer(
-			makeUppercaseEndpoint(svc),
-			decodeUppercaseRequest,
-			encodeResponse,
-		),
-		count: grpctransport.NewServer(
-			makeCountEndpoint(svc),
-			decodeCountRequest,
-			encodeResponse,
-		),
-	}
-}
 
 type grpcServer struct {
 	uppercase grpctransport.Handler
 	count     grpctransport.Handler
+}
+
+func (s *grpcServer) Uppercase(ctx context.Context, r *pb.UppercaseRequest) (*pb.UppercaseResponse, error) {
+	_, resp, err := s.uppercase.ServeGRPC(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+	return resp.(*pb.UppercaseResponse), nil
+}
+
+func (s *grpcServer) Count(ctx context.Context, r *pb.CountRequest) (*pb.CountResponse, error) {
+	_, resp, err := s.count.ServeGRPC(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+	return resp.(*pb.CountResponse), nil
+}
+
+// MakeGRPCServer - make gRPC server
+func MakeGRPCServer(svc StringService, logger log.Logger) pb.StringServiceServer {
+	return &grpcServer{
+		uppercase: grpctransport.NewServer(
+			makeUppercaseEndpoint(svc),
+			decodeGRPCUppercaseRequest,
+			encodeGRPCUppercaseResponse,
+		),
+		count: grpctransport.NewServer(
+			makeCountEndpoint(svc),
+			decodeGRPCCountRequest,
+			encodeGRPCCountResponse,
+		),
+	}
 }

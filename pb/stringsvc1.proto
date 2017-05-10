@@ -1,0 +1,21 @@
+syntax = "proto3";
+package pb;
+
+service StringService {
+  rpc Uppercase(UppercaseRequest) returns (UppercaseResponse) {}
+  rpc Count(CountRequest) returns (CountResponse) {}
+}
+message UppercaseRequest {
+  string inputString = 1;
+}
+message UppercaseResponse {
+  string uppercasedString = 1;
+  string err = 2;
+}
+message CountRequest {
+  string inputString = 1;
+}
+message CountResponse {
+  int64 length = 1;
+  string err = 2;
+}
