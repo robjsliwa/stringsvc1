@@ -1,4 +1,4 @@
-package main
+package stringsvc1
 
 import (
 	"net/http"

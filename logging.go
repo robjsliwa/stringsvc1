@@ -1,4 +1,4 @@
-package main
+package stringsvc1
 
 import (
 	"time"
@@ -6,14 +6,16 @@ import (
 	"github.com/go-kit/kit/log"
 )
 
-type loggingMiddleware struct {
-	logger log.Logger
-	next   StringService
+// LoggingMiddleware - loggin middleware
+type LoggingMiddleware struct {
+	Logger log.Logger
+	Next   StringService
 }
 
-func (mw loggingMiddleware) Uppercase(s string) (output string, err error) {
+// Uppercase - upper cases string
+func (mw LoggingMiddleware) Uppercase(s string) (output string, err error) {
 	defer func(begin time.Time) {
-		mw.logger.Log(
+		mw.Logger.Log(
 			"method", "uppercase",
 			"input", s,
 			"output", output,
@@ -22,13 +24,14 @@ func (mw loggingMiddleware) Uppercase(s string) (output string, err error) {
 		)
 	}(time.Now())
 
-	output, err = mw.next.Uppercase(s)
+	output, err = mw.Next.Uppercase(s)
 	return
 }
 
-func (mw loggingMiddleware) Count(s string) (n int) {
+// Count - counts number of chars in string
+func (mw LoggingMiddleware) Count(s string) (n int) {
 	defer func(begin time.Time) {
-		mw.logger.Log(
+		mw.Logger.Log(
 			"method", "count",
 			"input", s,
 			"n", n,
@@ -36,6 +39,6 @@ func (mw loggingMiddleware) Count(s string) (n int) {
 		)
 	}(time.Now())
 
-	n = mw.next.Count(s)
+	n = mw.Next.Count(s)
 	return
 }

@@ -1,4 +1,4 @@
-package main
+package stringsvc1
 
 import (
 	"golang.org/x/net/context"
@@ -34,13 +34,13 @@ func MakeGRPCServer(svc StringService, logger log.Logger) pb.StringServiceServer
 	return &grpcServer{
 		uppercase: grpctransport.NewServer(
 			makeUppercaseEndpoint(svc),
-			decodeGRPCUppercaseRequest,
-			encodeGRPCUppercaseResponse,
+			DecodeGRPCUppercaseRequest,
+			EncodeGRPCUppercaseResponse,
 		),
 		count: grpctransport.NewServer(
 			makeCountEndpoint(svc),
-			decodeGRPCCountRequest,
-			encodeGRPCCountResponse,
+			DecodeGRPCCountRequest,
+			EncodeGRPCCountResponse,
 		),
 	}
 }

@@ -1,4 +1,4 @@
-package main
+package stringsvc1
 
 import (
 	"errors"
@@ -16,9 +16,11 @@ type StringService interface {
 // ErrEmpty is returned when an input string is empty.
 var ErrEmpty = errors.New("empty string")
 
-type stringService struct{}
+// StringSrv - implements StringService
+type StringSrv struct{}
 
-func (stringService) Uppercase(s string) (string, error) {
+// Uppercase - upper cases chars in string
+func (StringSrv) Uppercase(s string) (string, error) {
 	if s == "" {
 		return "", ErrEmpty
 	}
@@ -26,6 +28,7 @@ func (stringService) Uppercase(s string) (string, error) {
 	return strings.ToUpper(s), nil
 }
 
-func (stringService) Count(s string) int {
+// Count - counts chars in string
+func (StringSrv) Count(s string) int {
 	return len(s)
 }

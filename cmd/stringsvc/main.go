@@ -11,15 +11,16 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/go-kit/kit/log"
+	"github.com/robjsliwa/stringsvc1"
 	"github.com/robjsliwa/stringsvc1/pb"
 )
 
 func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
 
-	var svc StringService
-	svc = stringService{}
-	svc = loggingMiddleware{logger, svc}
+	var svc stringsvc1.StringService
+	svc = stringsvc1.StringSrv{}
+	svc = stringsvc1.LoggingMiddleware{Logger: logger, Next: svc}
 
 	/*uppercaseHandler := httptransport.NewServer(
 		makeUppercaseEndpoint(svc),
@@ -47,7 +48,7 @@ func main() {
 
 	var h http.Handler
 	{
-		h = MakeHTTPHandler(svc, logger)
+		h = stringsvc1.MakeHTTPHandler(svc, logger)
 	}
 
 	// HTTP transport.
@@ -68,7 +69,7 @@ func main() {
 			return
 		}
 
-		srv := MakeGRPCServer(svc, logger)
+		srv := stringsvc1.MakeGRPCServer(svc, logger)
 		s := grpc.NewServer()
 		pb.RegisterStringServiceServer(s, srv)
 
