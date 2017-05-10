@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/robjsliwa/stringsvc1"
@@ -19,6 +18,7 @@ func main() {
 			"gRPC address")
 	)
 	flag.Parse()
+	ctx := context.Background()
 	conn, err := grpc.Dial(*grpcAddr, grpc.WithInsecure(),
 		grpc.WithTimeout(1*time.Second))
 	if err != nil {
@@ -32,37 +32,31 @@ func main() {
 	switch cmd {
 	case "uppercase":
 		var inputString string
-		inputString, args = pop(args)
-		uppercase(stringService, inputString)
-	case "validate":
-		var password, hash string
-		password, args = pop(args)
-		hash, args = pop(args)
-		validate(ctx, vaultService, password, hash)
+		inputString, _ = pop(args)
+		uppercase(ctx, stringService, inputString)
+	case "count":
+		var inputString string
+		inputString, _ = pop(args)
+		count(ctx, stringService, inputString)
 	default:
 		log.Fatalln("unknown command", cmd)
 	}
 }
 
-func uppercase(service stringsvc1.StringService, inputString string) {
-	h, err := service.Uppercase(inputString)
+func uppercase(ctx context.Context, service stringsvc1.StringService, inputString string) {
+	uppercasedString, err := service.Uppercase(ctx, inputString)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	fmt.Println(h)
+	fmt.Println(uppercasedString)
 }
 
-func validate(ctx context.Context, service vault.Service,
-	password, hash string) {
-	valid, err := service.Validate(ctx, password, hash)
+func count(ctx context.Context, service stringsvc1.StringService, inputString string) {
+	count, err := service.Count(ctx, inputString)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	if !valid {
-		fmt.Println("invalid")
-		os.Exit(1)
-	}
-	fmt.Println("valid")
+	fmt.Println(count)
 }
 
 func pop(s []string) (string, []string) {

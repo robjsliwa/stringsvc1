@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/go-kit/kit/endpoint"
+	"github.com/robjsliwa/stringsvc1/pb"
 )
 
 // **** Requests and responses
@@ -48,6 +49,26 @@ func makeCountEndpoint(svc StringService) endpoint.Endpoint {
 	}
 }
 
+func makeGRPCUppercaseEndpoint(svc StringService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(pb.UppercaseRequest)
+		uppercasedString, err := svc.Uppercase(ctx, req.InputString)
+		if err != nil {
+			return &pb.UppercaseResponse{UppercasedString: uppercasedString, Err: err.Error()}, nil
+		}
+
+		return &pb.UppercaseResponse{UppercasedString: uppercasedString, Err: ""}, nil
+	}
+}
+
+func makeGRPCCountEndpoint(svc StringService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(pb.CountRequest)
+		length, _ := svc.Count(ctx, req.InputString)
+		return &pb.CountResponse{Length: int64(length), Err: ""}, nil
+	}
+}
+
 // Endpoints - endpoints for primarily client
 type Endpoints struct {
 	UppercaseEndpoint endpoint.Endpoint
@@ -56,12 +77,12 @@ type Endpoints struct {
 
 // Uppercase - upper case chars in string
 func (e Endpoints) Uppercase(ctx context.Context, inputString string) (string, error) {
-	req := uppercaseRequest{InputString: inputString}
+	req := &pb.UppercaseRequest{InputString: inputString}
 	resp, err := e.UppercaseEndpoint(ctx, req)
 	if err != nil {
 		return "", err
 	}
-	uppercaseResp := resp.(uppercaseResponse)
+	uppercaseResp := resp.(pb.UppercaseResponse)
 	if uppercaseResp.Err != "" {
 		return "", errors.New(uppercaseResp.Err)
 	}
@@ -70,12 +91,12 @@ func (e Endpoints) Uppercase(ctx context.Context, inputString string) (string, e
 
 // Count - count chars in input string
 func (e Endpoints) Count(ctx context.Context, inputString string) (int, error) {
-	req := countRequest{InputString: inputString}
+	req := &pb.CountRequest{InputString: inputString}
 	resp, err := e.CountEndpoint(ctx, req)
 	if err != nil {
 		return 0, err
 	}
-	countResp := resp.(countResponse)
+	countResp := resp.(pb.CountResponse)
 
-	return countResp.Length, nil
+	return int(countResp.Length), nil
 }

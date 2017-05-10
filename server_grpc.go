@@ -33,12 +33,12 @@ func (s *grpcServer) Count(ctx context.Context, r *pb.CountRequest) (*pb.CountRe
 func MakeGRPCServer(svc StringService, logger log.Logger) pb.StringServiceServer {
 	return &grpcServer{
 		uppercase: grpctransport.NewServer(
-			makeUppercaseEndpoint(svc),
+			makeGRPCUppercaseEndpoint(svc),
 			DecodeGRPCUppercaseRequest,
 			EncodeGRPCUppercaseResponse,
 		),
 		count: grpctransport.NewServer(
-			makeCountEndpoint(svc),
+			makeGRPCCountEndpoint(svc),
 			DecodeGRPCCountRequest,
 			EncodeGRPCCountResponse,
 		),
