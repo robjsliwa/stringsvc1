@@ -5,3 +5,8 @@
 * go get -u golang.org/x/net/http2
 * go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 * protoc stringsvc1.proto --go_out=plugins=grpc:.
+
+# To test
+
+* curl -X POST -d '{"input_string": "robert"}' http://localhost:8080/uppercase
+* curl -X GET -d '{"input_string": "robert"}' http://localhost:8080/count

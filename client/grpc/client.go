@@ -31,7 +31,7 @@ func New(conn *grpc.ClientConn) stringsvc1.StringService {
 	}
 
 	return stringsvc1.Endpoints{
-		Uppercase: uppercaseEndpoint,
-		Count:     countEndpoint,
+		UppercaseEndpoint: uppercaseEndpoint,
+		CountEndpoint:     countEndpoint,
 	}
 }

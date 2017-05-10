@@ -1,14 +1,15 @@
 package stringsvc1
 
 import (
+	"context"
 	"errors"
 	"strings"
 )
 
 // StringService - model service as an interface
 type StringService interface {
-	Uppercase(string) (string, error)
-	Count(string) int
+	Uppercase(context.Context, string) (string, error)
+	Count(context.Context, string) (int, error)
 }
 
 // **** Business logic
@@ -20,7 +21,7 @@ var ErrEmpty = errors.New("empty string")
 type StringSrv struct{}
 
 // Uppercase - upper cases chars in string
-func (StringSrv) Uppercase(s string) (string, error) {
+func (StringSrv) Uppercase(ctx context.Context, s string) (string, error) {
 	if s == "" {
 		return "", ErrEmpty
 	}
@@ -29,6 +30,6 @@ func (StringSrv) Uppercase(s string) (string, error) {
 }
 
 // Count - counts chars in string
-func (StringSrv) Count(s string) int {
-	return len(s)
+func (StringSrv) Count(ctx context.Context, s string) (int, error) {
+	return len(s), nil
 }

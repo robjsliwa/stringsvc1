@@ -1,6 +1,7 @@
 package stringsvc1
 
 import (
+	"context"
 	"time"
 
 	"github.com/go-kit/kit/log"
@@ -13,7 +14,7 @@ type LoggingMiddleware struct {
 }
 
 // Uppercase - upper cases string
-func (mw LoggingMiddleware) Uppercase(s string) (output string, err error) {
+func (mw LoggingMiddleware) Uppercase(ctx context.Context, s string) (output string, err error) {
 	defer func(begin time.Time) {
 		mw.Logger.Log(
 			"method", "uppercase",
@@ -24,12 +25,12 @@ func (mw LoggingMiddleware) Uppercase(s string) (output string, err error) {
 		)
 	}(time.Now())
 
-	output, err = mw.Next.Uppercase(s)
+	output, err = mw.Next.Uppercase(ctx, s)
 	return
 }
 
 // Count - counts number of chars in string
-func (mw LoggingMiddleware) Count(s string) (n int) {
+func (mw LoggingMiddleware) Count(ctx context.Context, s string) (n int, err error) {
 	defer func(begin time.Time) {
 		mw.Logger.Log(
 			"method", "count",
@@ -39,6 +40,6 @@ func (mw LoggingMiddleware) Count(s string) (n int) {
 		)
 	}(time.Now())
 
-	n = mw.Next.Count(s)
+	n, err = mw.Next.Count(ctx, s)
 	return
 }
