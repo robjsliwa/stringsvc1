@@ -6,6 +6,12 @@ import (
 	"github.com/go-kit/kit/endpoint"
 )
 
+// Endpoints - endpoints for primarily client
+type Endpoints struct {
+	Uppercase endpoint.Endpoint
+	Count     endpoint.Endpoint
+}
+
 // **** Requests and responses
 
 type uppercaseRequest struct {
