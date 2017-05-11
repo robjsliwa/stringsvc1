@@ -18,7 +18,7 @@ func MakeHTTPHandler(svc StringService, logger log.Logger) http.Handler {
 		encodeResponse,
 	))
 
-	r.Methods("GET").Path("/count").Handler(httptransport.NewServer(
+	r.Methods("GET").Path("/count/{inputstring}").Handler(httptransport.NewServer(
 		makeCountEndpoint(svc),
 		decodeCountRequest,
 		encodeResponse,
@@ -29,7 +29,7 @@ func MakeHTTPHandler(svc StringService, logger log.Logger) http.Handler {
 		return
 	})
 
-	r.Path("/count").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	r.Path("/count/{inputstring}").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	})
