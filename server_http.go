@@ -24,5 +24,15 @@ func MakeHTTPHandler(svc StringService, logger log.Logger) http.Handler {
 		encodeResponse,
 	))
 
+	r.Path("/uppercase").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	})
+
+	r.Path("/count").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	})
+
 	return r
 }
