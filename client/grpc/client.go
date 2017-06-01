@@ -13,7 +13,7 @@ func New(conn *grpc.ClientConn) stringsvc1.StringService {
 	var uppercaseEndpoint endpoint.Endpoint
 	{
 		uppercaseEndpoint = grpctransport.NewClient(
-			conn, "StringService", "Uppercase",
+			conn, "pb.StringService", "Uppercase",
 			stringsvc1.EncodeGRPCUppercaseRequest,
 			stringsvc1.DecodeGRPCUppercaseResponse,
 			pb.UppercaseResponse{},
@@ -23,7 +23,7 @@ func New(conn *grpc.ClientConn) stringsvc1.StringService {
 	var countEndpoint endpoint.Endpoint
 	{
 		countEndpoint = grpctransport.NewClient(
-			conn, "StringService", "Count",
+			conn, "pb.StringService", "Count",
 			stringsvc1.EncodeGRPCCountRequest,
 			stringsvc1.DecodeGRPCCountResponse,
 			pb.CountResponse{},
