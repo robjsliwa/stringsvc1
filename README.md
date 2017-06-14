@@ -1,3 +1,6 @@
+# stringsvc1
+The purpose of this project was to learn go-kit.  This is my implementation of go-kit's stringsvc example with some additional features and REST API and grpc support.  
+
 # How to get proto to work
 
 * Get protoc from https://github.com/google/protobuf/releases
